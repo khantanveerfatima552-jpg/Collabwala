@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creator Onboarding — Collabwala</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --saffron: #FF6B00;
+  --gold: #FFB800;
+  --green: #00C853;
+  --navy: #0B0F1A;
+  --navy2: #131929;
+  --navy3: #1C2438;
+  --border: #252D42;
+  --text: #F2F4FF;
+  --muted: #8892AA;
+  --input-bg: #0d1120;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.35;
+}
+
+.bg-blob1 {
+  position: fixed; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(255,107,0,0.1) 0%, transparent 65%);
+  top: -200px; right: -100px;
+  border-radius: 50%; pointer-events: none; z-index: 0;
+}
+.bg-blob2 {
+  position: fixed; width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,184,0,0.07) 0%, transparent 65%);
+  bottom: -150px; left: -100px;
+  border-radius: 50%; pointer-events: none; z-index: 0;
+}
+
+nav {
+  position: sticky; top: 0; z-index: 50;
+  padding: 16px 5%;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(11,15,26,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,107,0,0.1);
+}
+
+.nav-logo {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 700; font-size: 22px;
+  text-decoration: none; color: var(--text);
+  letter-spacing: -0.5px;
+}
+.nav-logo span { color: var(--saffron); }
+
+.nav-back {
+  font-size: 14px; color: var(--muted);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 6px;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--saffron); }
+
+.container {
+  position: relative; z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 20px 100px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 48px;
+  animation: fadeDown 0.6s ease both;
+}
+
+.header-icon {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--saffron), var(--gold));
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 32px rgba(255,107,0,0.3);
+}
+
+h1 {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 5vw, 44px);
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  margin-bottom: 12px;
+}
+
+h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--saffron), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-sub {
+  color: var(--muted); font-size: 16px; line-height: 1.65;
+  max-width: 440px; margin: 0 auto;
+}
+
+.progress-bar-wrap { margin-bottom: 40px; animation: fadeUp 0.6s 0.1s ease both; }
+
+.steps-row {
+  display: flex; align-items: center; justify-content: center;
+  gap: 0; margin-bottom: 12px; flex-wrap: wrap;
+}
+
+.step-node {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 12px; border-radius: 100px;
+  font-size: 12px; font-weight: 600;
+  color: var(--muted); transition: all 0.3s; cursor: default;
+}
+
+.step-node.active {
+  background: rgba(255,107,0,0.12);
+  border: 1px solid rgba(255,107,0,0.3);
+  color: var(--saffron);
+}
+.step-node.done { color: var(--green); }
+
+.step-circle {
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800; transition: all 0.3s;
+}
+
+.step-node.active .step-circle { background: var(--saffron); color: white; }
+.step-node.done .step-circle { background: var(--green); color: #000; }
+
+.step-line { width: 24px; height: 1px; background: var(--border); transition: background 0.4s; }
+.step-line.done { background: rgba(0,200,83,0.4); }
+
+.progress-fill-track {
+  height: 3px; background: var(--border); border-radius: 100px; overflow: hidden;
+  max-width: 400px; margin: 0 auto;
+}
+.progress-fill-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--saffron), var(--gold));
+  border-radius: 100px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  width: 20%;
+}
+
+.form-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 24px; padding: 44px;
+  position: relative; overflow: hidden;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.form-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--saffron), var(--gold), var(--green));
+}
+
+@media (max-width: 600px) { .form-card { padding: 24px 18px; } }
+
+.step-panel { display: none; }
+.step-panel.active { display: block; animation: slideIn 0.4s ease both; }
+
+.step-heading {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 22px; font-weight: 700;
+  letter-spacing: -0.5px; margin-bottom: 6px;
+}
+.step-desc { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-grid.c1 { grid-template-columns: 1fr; }
+@media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group.full { grid-column: 1 / -1; }
+
+label {
+  font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted);
+}
+
+input, select, textarea {
+  background: var(--input-bg);
+  border: 1px solid var(--border); border-radius: 10px;
+  padding: 13px 16px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 15px; color: var(--text); outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s; width: 100%;
+}
+
+input::placeholder, textarea::placeholder { color: #2a3248; }
+input:focus, select:focus, textarea:focus {
+  border-color: var(--saffron);
+  box-shadow: 0 0 0 3px rgba(255,107,0,0.1);
+}
+select option { background: #131929; }
+textarea { resize: vertical; min-height: 100px; line-height: 1.65; }
+
+.prefix-wrap {
+  display: flex; align-items: center;
+  background: var(--input-bg);
+  border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.prefix-wrap:focus-within { border-color: var(--saffron); box-shadow: 0 0 0 3px rgba(255,107,0,0.1); }
+.prefix {
+  padding: 13px 12px 13px 16px; color: var(--muted); font-size: 14px;
+  white-space: nowrap; border-right: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+.prefix-wrap input { border: none; border-radius: 0; background: transparent; padding-left: 12px; box-shadow: none !important; }
+
+.helper { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.sec-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--saffron);
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,107,0,0.2); }
+
+.chip-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.chip {
+  padding: 8px 16px; border-radius: 100px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--muted);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+}
+.chip:hover { border-color: var(--saffron); color: var(--saffron); }
+.chip.sel { background: rgba(255,107,0,0.12); border-color: var(--saffron); color: var(--saffron); }
+
+.lang-chip {
+  padding: 8px 16px; border-radius: 8px;
+  border: 1px solid var(--border); background: transparent;
+  color: var(--muted);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s;
+}
+.lang-chip:hover { border-color: var(--gold); color: var(--gold); }
+.lang-chip.sel { background: rgba(255,184,0,0.1); border-color: var(--gold); color: var(--gold); }
+
+.platform-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+
+.platform-card {
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 12px; text-align: center; cursor: pointer;
+  transition: all 0.2s; background: transparent;
+  color: var(--muted); font-family: 'Cabinet Grotesk', sans-serif;
+}
+.platform-card:hover { border-color: var(--saffron); transform: translateY(-2px); }
+.platform-card.sel { border-color: var(--saffron); background: rgba(255,107,0,0.08); color: var(--text); }
+
+.platform-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+.platform-name { font-size: 12px; font-weight: 600; }
+
+.pricing-grid-wrap { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+
+.pricing-card {
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 12px; text-align: center; cursor: pointer;
+  transition: all 0.2s; background: transparent; font-family: 'Cabinet Grotesk', sans-serif;
+}
+.pricing-card:hover { border-color: var(--gold); }
+.pricing-card.sel { border-color: var(--gold); background: rgba(255,184,0,0.08); }
+
+.pricing-amt { font-family: 'Clash Display', sans-serif; font-size: 15px; font-weight: 700; color: var(--gold); margin-bottom: 4px; }
+.pricing-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+.review-table { display: flex; flex-direction: column; gap: 10px; }
+
+.review-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 14px 18px; background: var(--input-bg);
+  border-radius: 10px; border: 1px solid var(--border); gap: 12px;
+}
+.review-key { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; flex-shrink: 0; }
+.review-val { font-size: 14px; font-weight: 600; text-align: right; flex: 1; }
+
+.checkbox-wrap {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 16px; background: var(--input-bg);
+  border-radius: 10px; border: 1px solid var(--border); cursor: pointer;
+  margin-bottom: 12px;
+}
+.checkbox-wrap input[type="checkbox"] { width: 18px; height: 18px; min-width: 18px; margin-top: 2px; accent-color: var(--saffron); cursor: pointer; }
+.checkbox-text { font-size: 14px; color: var(--muted); line-height: 1.55; }
+.checkbox-text a { color: var(--saffron); text-decoration: none; }
+
+.divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+.btn-row { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; gap: 12px; }
+
+.btn { padding: 14px 28px; border-radius: 12px; font-family: 'Cabinet Grotesk', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: all 0.2s; border: none; }
+
+.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+.btn-ghost:hover { border-color: var(--text); color: var(--text); }
+
+.btn-primary { background: linear-gradient(135deg, var(--saffron), #ff9500); color: white; flex: 1; max-width: 240px; box-shadow: 0 4px 20px rgba(255,107,0,0.3); }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(255,107,0,0.4); }
+
+.success-screen { display: none; text-align: center; padding: 60px 20px; }
+.success-screen.show { display: block; animation: fadeUp 0.6s ease both; }
+
+.success-icon {
+  width: 90px; height: 90px;
+  background: linear-gradient(135deg, var(--green), #00a843);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 40px; margin: 0 auto 24px;
+  animation: pop 0.5s 0.1s cubic-bezier(.36,.07,.19,.97) both;
+  box-shadow: 0 8px 40px rgba(0,200,83,0.3);
+}
+
+@keyframes pop { 0%{transform:scale(0)} 80%{transform:scale(1.15)} 100%{transform:scale(1)} }
+
+.success-title { font-family: 'Clash Display', sans-serif; font-size: 36px; font-weight: 700; letter-spacing: -1px; margin-bottom: 14px; }
+.success-sub { color: var(--muted); font-size: 16px; max-width: 400px; margin: 0 auto 32px; line-height: 1.65; }
+
+.tag-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 32px; }
+.tag { padding: 7px 16px; background: rgba(0,200,83,0.1); border: 1px solid rgba(0,200,83,0.3); border-radius: 100px; font-size: 13px; color: var(--green); font-weight: 600; }
+
+.btn-success {
+  display: inline-block; padding: 14px 32px;
+  background: linear-gradient(135deg, var(--saffron), #ff9500);
+  color: white; border-radius: 12px; text-decoration: none;
+  font-weight: 800; font-size: 16px;
+  box-shadow: 0 4px 20px rgba(255,107,0,0.3); transition: all 0.2s;
+}
+.btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,107,0,0.4); }
+
+@keyframes fadeDown { from{opacity:0;transform:translateY(-20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideIn { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+</style>
+</head>
+<body>
+
+<div class="bg-blob1"></div>
+<div class="bg-blob2"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Collab<span>wala</span></a>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="container">
+
+  <div class="page-header">
+    <div class="header-icon">✨</div>
+    <h1>Join as a <em>Creator</em></h1>
+    <p class="page-sub">Build your profile, get discovered by top brands, and start earning from collaborations across India.</p>
+  </div>
+
+  <div class="progress-bar-wrap" id="progressWrap">
+    <div class="steps-row">
+      <div class="step-node active" id="node-1"><div class="step-circle">1</div> Basic Info</div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-node" id="node-2"><div class="step-circle">2</div> Niche & Reach</div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step-node" id="node-3"><div class="step-circle">3</div> Social Handles</div>
+      <div class="step-line" id="line-3"></div>
+      <div class="step-node" id="node-4"><div class="step-circle">4</div> Pricing</div>
+      <div class="step-line" id="line-4"></div>
+      <div class="step-node" id="node-5"><div class="step-circle">5</div> Review</div>
+    </div>
+    <div class="progress-fill-track">
+      <div class="progress-fill-bar" id="progressBar"></div>
+    </div>
+  </div>
+
+  <div class="form-card" id="formCard">
+
+    <!-- STEP 1 -->
+    <div class="step-panel active" id="step-1">
+      <div class="step-heading">Tell us about yourself</div>
+      <div class="step-desc">This will be shown on your public creator profile on Collabwala.</div>
+      <div class="form-grid">
+        <div class="form-group"><label>First Name *</label><input type="text" id="firstName" placeholder="Rahul" /></div>
+        <div class="form-group"><label>Last Name *</label><input type="text" id="lastName" placeholder="Sharma" /></div>
+        <div class="form-group"><label>Email Address *</label><input type="email" id="email" placeholder="rahul@gmail.com" /></div>
+        <div class="form-group">
+          <label>WhatsApp Number *</label>
+          <div class="prefix-wrap"><span class="prefix">🇮🇳 +91</span><input type="tel" id="phone" placeholder="9876543210" maxlength="10" /></div>
+        </div>
+        <div class="form-group">
+          <label>City / State *</label>
+          <select id="city">
+            <option value="">Select your city</option>
+            <option>Mumbai, Maharashtra</option><option>Delhi, Delhi</option>
+            <option>Bengaluru, Karnataka</option><option>Chennai, Tamil Nadu</option>
+            <option>Hyderabad, Telangana</option><option>Kolkata, West Bengal</option>
+            <option>Pune, Maharashtra</option><option>Ahmedabad, Gujarat</option>
+            <option>Jaipur, Rajasthan</option><option>Lucknow, Uttar Pradesh</option>
+            <option>Chandigarh, Punjab</option><option>Patna, Bihar</option>
+            <option>Bhopal, Madhya Pradesh</option><option>Indore, Madhya Pradesh</option>
+            <option>Kochi, Kerala</option><option>Other (Tier 2/3 City)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Gender</label>
+          <select id="gender"><option value="">Prefer not to say</option><option>Male</option><option>Female</option><option>Non-binary</option></select>
+        </div>
+        <div class="form-group full">
+          <label>Short Bio *</label>
+          <textarea id="bio" placeholder="Tell brands who you are — your content style, audience, and what makes you unique. Keep it punchy!"></textarea>
+          <div class="helper">Max 250 characters. This is your pitch to brands.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-panel" id="step-2">
+      <div class="step-heading">Your niche & audience</div>
+      <div class="step-desc">Help brands find the right creator — that's you.</div>
+      <div class="sec-label">Select Your Content Niches (up to 4)</div>
+      <div class="chip-grid" id="nicheGrid">
+        <button class="chip" onclick="toggleNiche(this)">👗 Fashion</button>
+        <button class="chip" onclick="toggleNiche(this)">💄 Beauty</button>
+        <button class="chip" onclick="toggleNiche(this)">🍽️ Food</button>
+        <button class="chip" onclick="toggleNiche(this)">✈️ Travel</button>
+        <button class="chip" onclick="toggleNiche(this)">💪 Fitness</button>
+        <button class="chip" onclick="toggleNiche(this)">📱 Tech</button>
+        <button class="chip" onclick="toggleNiche(this)">🎮 Gaming</button>
+        <button class="chip" onclick="toggleNiche(this)">📚 Education</button>
+        <button class="chip" onclick="toggleNiche(this)">💰 Finance</button>
+        <button class="chip" onclick="toggleNiche(this)">🎭 Entertainment</button>
+        <button class="chip" onclick="toggleNiche(this)">🏡 Home Decor</button>
+        <button class="chip" onclick="toggleNiche(this)">🌱 Sustainability</button>
+        <button class="chip" onclick="toggleNiche(this)">📸 Photography</button>
+        <button class="chip" onclick="toggleNiche(this)">🎵 Music</button>
+        <button class="chip" onclick="toggleNiche(this)">🐾 Pets</button>
+        <button class="chip" onclick="toggleNiche(this)">👶 Parenting</button>
+        <button class="chip" onclick="toggleNiche(this)">⚽ Sports</button>
+        <button class="chip" onclick="toggleNiche(this)">🧘 Wellness</button>
+        <button class="chip" onclick="toggleNiche(this)">💼 Business</button>
+        <button class="chip" onclick="toggleNiche(this)">🎨 Art & Design</button>
+      </div>
+      <div class="divider"></div>
+      <div class="sec-label">Languages You Create In</div>
+      <div class="chip-grid" id="langGrid">
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Hindi</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">English</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Hinglish</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Tamil</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Telugu</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Kannada</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Malayalam</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Marathi</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Bengali</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Gujarati</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Punjabi</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Odia</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Bhojpuri</button>
+        <button class="lang-chip" onclick="this.classList.toggle('sel')">Urdu</button>
+      </div>
+      <div class="divider"></div>
+      <div class="sec-label">Audience Demographics (Optional)</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Primary Audience Gender</label>
+          <select id="audienceGender"><option value="">Mixed / Not sure</option><option>Mostly Male</option><option>Mostly Female</option><option>Balanced 50/50</option></select>
+        </div>
+        <div class="form-group">
+          <label>Audience Age Range</label>
+          <select id="audienceAge"><option value="">Not sure</option><option>13–17 (Gen Z Teens)</option><option>18–24 (Young Adults)</option><option>25–34 (Millennials)</option><option>35–45 (Gen X)</option><option>45+ (Mature)</option></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-panel" id="step-3">
+      <div class="step-heading">Connect your platforms</div>
+      <div class="step-desc">Select all platforms where you create content regularly.</div>
+      <div class="sec-label">Platforms You're Active On</div>
+      <div class="platform-grid">
+        <div class="platform-card" onclick="togglePlatform(this,'instagram')"><span class="platform-icon">📸</span><div class="platform-name">Instagram</div></div>
+        <div class="platform-card" onclick="togglePlatform(this,'youtube')"><span class="platform-icon">▶️</span><div class="platform-name">YouTube</div></div>
+        <div class="platform-card" onclick="togglePlatform(this,'moj')"><span class="platform-icon">🎬</span><div class="platform-name">Moj</div></div>
+        <div class="platform-card" onclick="togglePlatform(this,'josh')"><span class="platform-icon">🌟</span><div class="platform-name">Josh</div></div>
+        <div class="platform-card" onclick="togglePlatform(this,'twitter')"><span class="platform-icon">🐦</span><div class="platform-name">X / Twitter</div></div>
+        <div class="platform-card" onclick="togglePlatform(this,'linkedin')"><span class="platform-icon">💼</span><div class="platform-name">LinkedIn</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="sec-label">Enter Your Handles & Follower Counts</div>
+      <div id="handleInputs" class="form-grid c1">
+        <div class="form-group"><label style="color:var(--muted);text-transform:none;font-weight:400;font-size:14px;">👆 Select platforms above to enter your handle details</label></div>
+      </div>
+      <div class="divider"></div>
+      <div class="form-group">
+        <label>Portfolio / Media Kit Link (Optional)</label>
+        <div class="prefix-wrap"><span class="prefix">🔗</span><input type="url" id="portfolio" placeholder="https://drive.google.com/your-media-kit" /></div>
+        <div class="helper">Google Drive, Notion page, or any link with your past work</div>
+      </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-panel" id="step-4">
+      <div class="step-heading">Set your collaboration pricing</div>
+      <div class="step-desc">Be transparent. Brands love knowing what to expect upfront.</div>
+      <div class="sec-label">Reel / YouTube Video Rate</div>
+      <div class="pricing-grid-wrap" id="pricingPost">
+        <div class="pricing-card" onclick="selectPricing(this,'post')"><div class="pricing-amt">₹1K–₹5K</div><div class="pricing-lbl">Nano</div></div>
+        <div class="pricing-card" onclick="selectPricing(this,'post')"><div class="pricing-amt">₹5K–₹20K</div><div class="pricing-lbl">Micro</div></div>
+        <div class="pricing-card" onclick="selectPricing(this,'post')"><div class="pricing-amt">₹20K–₹50K</div><div class="pricing-lbl">Mid-Tier</div></div>
+        <div class="pricing-card" onclick="selectPricing(this,'post')"><div class="pricing-amt">₹50K–₹1L</div><div class="pricing-lbl">Macro</div></div>
+        <div class="pricing-card" onclick="selectPricing(this,'post')"><div class="pricing-amt">₹1L+</div><div class="pricing-lbl">Top Creator</div></div>
+        <div class="pricing-card" onclick="selectPricing(this,'post')"><div class="pricing-amt">Negotiable</div><div class="pricing-lbl">Let's Talk</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="sec-label">Story / Short Video Rate</div>
+      <div class="pricing-grid-wrap" id="pricingStory">
+        <div class="pricing-card" onclick="selectPricing(this,'story')"><div class="pricing-amt">₹500–₹2K</div><div class="pricing-lbl">Nano</div></div>
+        <div class="pricing-card" onclick="selectPricing(this,'story')"><div class="pricing-amt">₹2K–₹8K</div><div class="pricing-lbl">Micro</div></div>
+        <div class="pricing-card" onclick="selectPricing(this,'story')"><div class="pricing-amt">₹8K–₹25K</div><div class="pricing-lbl">Mid-Tier</div></div>
+        <div class="pricing-card" onclick="selectPricing(this,'story')"><div class="pricing-amt">₹25K+</div><div class="pricing-lbl">Macro+</div></div>
+        <div class="pricing-card" onclick="selectPricing(this,'story')"><div class="pricing-amt">Negotiable</div><div class="pricing-lbl">Let's Talk</div></div>
+      </div>
+      <div class="divider"></div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Open to Barter / Product Collabs?</label>
+          <select id="barter"><option value="">Select preference</option><option>Yes, open to barter only</option><option>Yes, barter + paid both</option><option>Paid collabs only</option><option>Depends on the brand</option></select>
+        </div>
+        <div class="form-group">
+          <label>Brands You Won't Work With (Optional)</label>
+          <input type="text" id="restrictions" placeholder="e.g. alcohol, tobacco, gambling..." />
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-panel" id="step-5">
+      <div class="step-heading">Review your profile</div>
+      <div class="step-desc">Almost done! Check your details before going live on Collabwala.</div>
+      <div class="review-table" id="reviewTable"></div>
+      <div class="divider"></div>
+      <label class="checkbox-wrap">
+        <input type="checkbox" id="terms" />
+        <span class="checkbox-text">I agree to Collabwala's <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>. I confirm all information is accurate and these social accounts belong to me.</span>
+      </label>
+      <label class="checkbox-wrap">
+        <input type="checkbox" id="whatsapp" checked />
+        <span class="checkbox-text">Receive brand collaboration requests and platform updates on WhatsApp.</span>
+      </label>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-ghost" id="backBtn" onclick="goBack()" style="display:none">← Back</button>
+      <button class="btn btn-primary" id="nextBtn" onclick="goNext()">Continue →</button>
+    </div>
+  </div>
+
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✓</div>
+    <div class="success-title">You're on Collabwala! 🎉</div>
+    <p class="success-sub">Your creator profile is submitted. Our team will verify and activate it within 24–48 hours. Watch for a WhatsApp notification!</p>
+    <div class="tag-row">
+      <span class="tag">✓ Profile Submitted</span>
+      <span class="tag">✓ Verification Pending</span>
+      <span class="tag">✓ WhatsApp Alert Set</span>
+    </div>
+    <a href="index.html" class="btn-success">← Back to Home</a>
+  </div>
+
+</div>
+
+<script>
+let currentStep = 1;
+const fills = ['20%','40%','60%','80%','100%'];
+const selectedPlatforms = {};
+let selectedPostPricing = '';
+let selectedStoryPricing = '';
+
+function goNext() {
+  if (currentStep < 5) { markDone(currentStep); currentStep++; showStep(currentStep); }
+  else { submitForm(); }
+}
+
+function goBack() { if (currentStep > 1) { currentStep--; showStep(currentStep); } }
+
+function showStep(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`step-${n}`).classList.add('active');
+  document.querySelectorAll('.step-node').forEach(nd => nd.classList.remove('active'));
+  document.getElementById(`node-${n}`).classList.add('active');
+  document.getElementById('progressBar').style.width = fills[n-1];
+  document.getElementById('backBtn').style.display = n > 1 ? 'block' : 'none';
+  document.getElementById('nextBtn').textContent = n === 5 ? '🚀 Submit Profile' : 'Continue →';
+  if (n === 5) populateReview();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function markDone(n) {
+  const node = document.getElementById(`node-${n}`);
+  node.classList.remove('active'); node.classList.add('done');
+  node.querySelector('.step-circle').textContent = '✓';
+  const line = document.getElementById(`line-${n}`);
+  if (line) line.classList.add('done');
+}
+
+function toggleNiche(btn) {
+  const sel = document.querySelectorAll('#nicheGrid .chip.sel');
+  if (!btn.classList.contains('sel') && sel.length >= 4) return;
+  btn.classList.toggle('sel');
+}
+
+const platformInfo = {
+  instagram:{icon:'📸',label:'Instagram'}, youtube:{icon:'▶️',label:'YouTube'},
+  moj:{icon:'🎬',label:'Moj'}, josh:{icon:'🌟',label:'Josh'},
+  twitter:{icon:'🐦',label:'X / Twitter'}, linkedin:{icon:'💼',label:'LinkedIn'}
+};
+
+function togglePlatform(card, platform) {
+  card.classList.toggle('sel');
+  if (selectedPlatforms[platform]) delete selectedPlatforms[platform];
+  else selectedPlatforms[platform] = { handle: '', followers: '' };
+  renderHandleInputs();
+}
+
+function renderHandleInputs() {
+  const container = document.getElementById('handleInputs');
+  const platforms = Object.keys(selectedPlatforms);
+  if (!platforms.length) {
+    container.innerHTML = `<div class="form-group"><label style="color:var(--muted);text-transform:none;font-weight:400;font-size:14px;">👆 Select platforms above to enter your handle details</label></div>`;
+    return;
+  }
+  container.innerHTML = platforms.map(p => {
+    const info = platformInfo[p];
+    return `
+      <div class="form-group">
+        <label>${info.icon} ${info.label} Username</label>
+        <div class="prefix-wrap"><span class="prefix">@</span><input type="text" placeholder="${info.label.toLowerCase().replace(' / ','')}username" oninput="selectedPlatforms['${p}'].handle=this.value" value="${selectedPlatforms[p].handle}" /></div>
+      </div>
+      <div class="form-group">
+        <label>${info.icon} ${info.label} Followers</label>
+        <select onchange="selectedPlatforms['${p}'].followers=this.value">
+          <option value="">Select range</option>
+          <option>1K – 10K</option><option>10K – 50K</option><option>50K – 100K</option>
+          <option>100K – 500K</option><option>500K – 1M</option><option>1M+</option>
+        </select>
+      </div>`;
+  }).join('');
+}
+
+function selectPricing(card, type) {
+  card.closest('.pricing-grid-wrap').querySelectorAll('.pricing-card').forEach(c => c.classList.remove('sel'));
+  card.classList.add('sel');
+  if (type === 'post') selectedPostPricing = card.querySelector('.pricing-amt').textContent;
+  else selectedStoryPricing = card.querySelector('.pricing-amt').textContent;
+}
+
+function g(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+
+function populateReview() {
+  const niches = [...document.querySelectorAll('#nicheGrid .chip.sel')].map(b => b.textContent).join(', ');
+  const langs = [...document.querySelectorAll('#langGrid .lang-chip.sel')].map(b => b.textContent).join(', ');
+  const platforms = Object.keys(selectedPlatforms).map(p => {
+    const d = selectedPlatforms[p];
+    return `${platformInfo[p].icon} ${platformInfo[p].label} @${d.handle||'—'} (${d.followers||'—'})`;
+  }).join(' | ');
+
+  const rows = [
+    ['Name', `${g('firstName')} ${g('lastName')}`],
+    ['Email', g('email')||'—'],
+    ['WhatsApp', `+91 ${g('phone')||'—'}`],
+    ['City', g('city')||'—'],
+    ['Niches', niches||'—'],
+    ['Languages', langs||'—'],
+    ['Platforms', platforms||'—'],
+    ['Reel Rate', selectedPostPricing||'—'],
+    ['Story Rate', selectedStoryPricing||'—'],
+    ['Barter Open?', g('barter')||'—'],
+  ];
+
+  document.getElementById('reviewTable').innerHTML = rows.map(([k,v]) => `
+    <div class="review-row"><div class="review-key">${k}</div><div class="review-val">${v}</div></div>
+  `).join('');
+}
+
+function submitForm() {
+  if (!document.getElementById('terms').checked) { alert('Please agree to the Terms & Conditions to continue.'); return; }
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('successScreen').classList.add('show');
+}
+</script>
+</body>
+</html>

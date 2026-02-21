@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Collabwala — India's Creator Marketplace</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --saffron: #FF6B00;
+  --gold: #FFB800;
+  --green: #00C853;
+  --navy: #0B0F1A;
+  --navy2: #131929;
+  --navy3: #1C2438;
+  --border: #252D42;
+  --text: #F2F4FF;
+  --muted: #8892AA;
+  --white: #ffffff;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ── Noise texture overlay ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 18px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(11,15,26,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,107,0,0.1);
+}
+
+.nav-logo {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.nav-logo span {
+  color: var(--saffron);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--text); }
+
+.nav-ctas {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-nav-ghost {
+  padding: 9px 20px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-nav-ghost:hover { border-color: var(--saffron); color: var(--saffron); }
+
+.btn-nav-primary {
+  padding: 9px 20px;
+  background: var(--saffron);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-nav-primary:hover {
+  background: #ff8533;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(255,107,0,0.3);
+}
+
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .btn-nav-ghost { display: none; }
+}
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 5% 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg-circle1 {
+  position: absolute;
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, rgba(255,107,0,0.15) 0%, transparent 65%);
+  top: -200px; right: -100px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-bg-circle2 {
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,184,0,0.08) 0%, transparent 65%);
+  bottom: -100px; left: 10%;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Diagonal stripe decoration */
+.hero-stripe {
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 45%;
+  background: linear-gradient(135deg, rgba(255,107,0,0.04) 0%, transparent 60%);
+  clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
+  pointer-events: none;
+}
+
+.hero-content {
+  max-width: 680px;
+  position: relative;
+  z-index: 2;
+  animation: heroIn 0.8s ease both;
+}
+
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 8px;
+  background: rgba(255,107,0,0.12);
+  border: 1px solid rgba(255,107,0,0.3);
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--saffron);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+
+.hero-badge-dot {
+  width: 8px; height: 8px;
+  background: var(--saffron);
+  border-radius: 50%;
+  animation: pulse 1.5s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+h1 {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 700;
+  font-size: clamp(42px, 6vw, 76px);
+  line-height: 1.0;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+}
+
+h1 .line2 {
+  display: block;
+  background: linear-gradient(90deg, var(--saffron), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h1 .line3 {
+  display: block;
+  color: var(--text);
+}
+
+.hero-sub {
+  font-size: clamp(16px, 2vw, 19px);
+  color: var(--muted);
+  line-height: 1.65;
+  max-width: 520px;
+  margin-bottom: 40px;
+  font-weight: 400;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 56px;
+}
+
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, var(--saffron), #FF9500);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s;
+  box-shadow: 0 4px 24px rgba(255,107,0,0.35);
+}
+
+.btn-hero-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 36px rgba(255,107,0,0.45);
+}
+
+.btn-hero-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 32px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-hero-ghost:hover { border-color: var(--saffron); color: var(--saffron); }
+
+/* Stats row */
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.stat-item { }
+
+.stat-num {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.stat-num span { color: var(--saffron); }
+
+.stat-label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+/* Floating creator cards */
+.hero-visual {
+  position: absolute;
+  right: 4%;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  z-index: 2;
+  animation: floatIn 1s 0.3s ease both;
+}
+
+@keyframes floatIn {
+  from { opacity: 0; transform: translateY(calc(-50% + 30px)); }
+  to { opacity: 1; transform: translateY(-50%); }
+}
+
+@media (max-width: 1024px) { .hero-visual { display: none; } }
+
+.creator-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 260px;
+  transition: transform 0.3s;
+}
+
+.creator-card:hover { transform: translateX(-4px); }
+.creator-card:nth-child(2) { margin-left: 24px; animation: float 3s ease-in-out infinite; }
+.creator-card:nth-child(4) { margin-left: 16px; animation: float 3.5s 0.5s ease-in-out infinite; }
+
+@keyframes float {
+  0%, 100% { transform: translateX(24px); }
+  50% { transform: translateX(16px); }
+}
+
+.creator-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.creator-info { flex: 1; }
+
+.creator-name {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 2px;
+}
+
+.creator-meta {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.creator-followers {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--saffron);
+}
+
+.verified-badge {
+  width: 18px; height: 18px;
+  background: var(--green);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  color: white;
+  flex-shrink: 0;
+}
+
+/* ── SECTION BASE ── */
+section {
+  padding: 100px 5%;
+}
+
+.section-tag {
+  display: inline-block;
+  padding: 5px 14px;
+  background: rgba(255,107,0,0.1);
+  border: 1px solid rgba(255,107,0,0.25);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--saffron);
+  margin-bottom: 20px;
+}
+
+.section-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  margin-bottom: 16px;
+}
+
+.section-sub {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.65;
+  max-width: 520px;
+  font-weight: 400;
+}
+
+/* ── HOW IT WORKS ── */
+.how-section { background: var(--navy2); }
+
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 2px;
+  margin-top: 64px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.how-card {
+  background: var(--navy);
+  padding: 36px 28px;
+  position: relative;
+  transition: background 0.25s;
+}
+
+.how-card:hover { background: var(--navy3); }
+
+.how-number {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 52px;
+  font-weight: 700;
+  color: rgba(255,107,0,0.15);
+  line-height: 1;
+  margin-bottom: 20px;
+  letter-spacing: -2px;
+}
+
+.how-icon {
+  font-size: 32px;
+  margin-bottom: 16px;
+  display: block;
+}
+
+.how-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin-bottom: 10px;
+}
+
+.how-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* ── FEATURES ── */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 64px;
+}
+
+.feature-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--saffron), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.feature-card:hover { border-color: rgba(255,107,0,0.3); transform: translateY(-4px); }
+.feature-card:hover::before { opacity: 1; }
+
+.feature-icon {
+  width: 48px; height: 48px;
+  background: rgba(255,107,0,0.1);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+
+.feature-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  margin-bottom: 10px;
+}
+
+.feature-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+/* ── NICHES ── */
+.niches-section { overflow: hidden; }
+
+.niche-scroll-wrap {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.niche-row {
+  display: flex;
+  gap: 12px;
+  animation: scrollLeft 30s linear infinite;
+  width: max-content;
+}
+
+.niche-row.reverse { animation: scrollRight 35s linear infinite; }
+
+@keyframes scrollLeft {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes scrollRight {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.niche-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--text);
+  transition: all 0.2s;
+  cursor: default;
+}
+
+.niche-chip:hover {
+  border-color: var(--saffron);
+  color: var(--saffron);
+  background: rgba(255,107,0,0.06);
+}
+
+/* ── PRICING SECTION ── */
+.pricing-section { background: var(--navy2); }
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 64px;
+}
+
+.pricing-card {
+  background: var(--navy);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  position: relative;
+  transition: all 0.25s;
+}
+
+.pricing-card.featured {
+  border-color: var(--saffron);
+  background: linear-gradient(160deg, rgba(255,107,0,0.08) 0%, var(--navy) 60%);
+}
+
+.featured-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--saffron);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.pricing-plan {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 12px;
+}
+
+.pricing-price {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.pricing-price sup {
+  font-size: 22px;
+  vertical-align: super;
+  margin-right: 2px;
+}
+
+.pricing-period {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.pricing-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.pricing-features li {
+  font-size: 14px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pricing-features li::before {
+  content: '✓';
+  color: var(--green);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.pricing-features li.disabled { opacity: 0.35; }
+.pricing-features li.disabled::before { content: '✕'; color: var(--muted); }
+
+.btn-pricing {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+.btn-pricing-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.btn-pricing-ghost:hover { border-color: var(--saffron); color: var(--saffron); }
+
+.btn-pricing-primary {
+  background: var(--saffron);
+  border: none;
+  color: white;
+  box-shadow: 0 4px 20px rgba(255,107,0,0.3);
+}
+
+.btn-pricing-primary:hover {
+  background: #ff8533;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 28px rgba(255,107,0,0.4);
+}
+
+/* ── TESTIMONIALS ── */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  margin-top: 64px;
+}
+
+.testimonial-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+}
+
+.testimonial-stars {
+  color: var(--gold);
+  font-size: 14px;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.testimonial-text {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.author-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+
+.author-name { font-weight: 700; font-size: 14px; }
+.author-meta { font-size: 12px; color: var(--muted); }
+
+/* ── CTA SECTION ── */
+.cta-section {
+  padding: 80px 5%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.cta-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(255,107,0,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 50%, rgba(255,184,0,0.08) 0%, transparent 60%);
+}
+
+.cta-section h2 {
+  font-family: 'Clash Display', sans-serif;
+  font-size: clamp(36px, 5vw, 62px);
+  font-weight: 700;
+  letter-spacing: -2px;
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+
+.cta-section h2 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--saffron), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cta-section p {
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.65;
+  margin-bottom: 40px;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--navy2);
+  border-top: 1px solid var(--border);
+  padding: 60px 5% 32px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 48px;
+}
+
+@media (max-width: 768px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.footer-brand .nav-logo { font-size: 22px; display: inline-block; margin-bottom: 14px; }
+
+.footer-tagline {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.6;
+  max-width: 260px;
+}
+
+.footer-col-title {
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.footer-links a:hover { color: var(--saffron); }
+
+.footer-bottom {
+  border-top: 1px solid var(--border);
+  padding-top: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.footer-copy { font-size: 13px; color: var(--muted); }
+
+.footer-flag {
+  font-size: 13px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ── Utility ── */
+.text-orange { color: var(--saffron); }
+
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">Collab<span>wala</span></a>
+  <ul class="nav-links">
+    <li><a href="#how">How it Works</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#niches">Niches</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+  </ul>
+  <div class="nav-ctas">
+    <a href="creator-onboarding.html" class="btn-nav-ghost">Join as Creator</a>
+    <a href="brand-signup.html" class="btn-nav-primary">I'm a Brand →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circle1"></div>
+  <div class="hero-bg-circle2"></div>
+  <div class="hero-stripe"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      India's #1 Creator Marketplace
+    </div>
+
+    <h1>
+      Where Brands
+      <em class="line2">Meet Creators</em>
+      <span class="line3">Across Bharat</span>
+    </h1>
+
+    <p class="hero-sub">
+      Connect with 50,000+ verified influencers across Instagram, YouTube, Moj, Josh & more — from metro cities to tier 2 towns. Real creators, real results, transparent pricing.
+    </p>
+
+    <div class="hero-ctas">
+      <a href="brand-signup.html" class="btn-hero-primary">
+        🚀 Start a Campaign
+      </a>
+      <a href="creator-onboarding.html" class="btn-hero-ghost">
+        ✨ Join as Creator
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">50K<span>+</span></div>
+        <div class="stat-label">Verified Creators</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">12K<span>+</span></div>
+        <div class="stat-label">Brand Campaigns</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">28<span>+</span></div>
+        <div class="stat-label">Indian Languages</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating creator cards -->
+  <div class="hero-visual">
+    <div class="creator-card">
+      <div class="creator-avatar" style="background:rgba(255,107,0,0.15)">👩</div>
+      <div class="creator-info">
+        <div class="creator-name">Priya Kapoor</div>
+        <div class="creator-meta">Fashion · Mumbai</div>
+        <div class="creator-followers">2.4M followers</div>
+      </div>
+      <div class="verified-badge">✓</div>
+    </div>
+    <div class="creator-card">
+      <div class="creator-avatar" style="background:rgba(0,200,83,0.15)">👨</div>
+      <div class="creator-info">
+        <div class="creator-name">Rohit Vlogs</div>
+        <div class="creator-meta">Food · Delhi</div>
+        <div class="creator-followers">890K followers</div>
+      </div>
+      <div class="verified-badge">✓</div>
+    </div>
+    <div class="creator-card">
+      <div class="creator-avatar" style="background:rgba(255,184,0,0.15)">👩</div>
+      <div class="creator-info">
+        <div class="creator-name">Ananya Fitness</div>
+        <div class="creator-meta">Fitness · Bengaluru</div>
+        <div class="creator-followers">345K followers</div>
+      </div>
+      <div class="verified-badge">✓</div>
+    </div>
+    <div class="creator-card">
+      <div class="creator-avatar" style="background:rgba(124,58,237,0.15)">👦</div>
+      <div class="creator-info">
+        <div class="creator-name">TechBhaiya</div>
+        <div class="creator-meta">Tech · Lucknow</div>
+        <div class="creator-followers">1.1M followers</div>
+      </div>
+      <div class="verified-badge">✓</div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="how">
+  <div class="scroll-reveal">
+    <div class="section-tag">How It Works</div>
+    <h2 class="section-title">Simple as 1, 2, 3</h2>
+    <p class="section-sub">From listing your brief to getting content delivered — all in one place.</p>
+  </div>
+
+  <div class="how-grid scroll-reveal">
+    <div class="how-card">
+      <div class="how-number">01</div>
+      <span class="how-icon">📋</span>
+      <div class="how-title">Post Your Brief</div>
+      <p class="how-desc">Tell us your product, budget, target audience, and the type of content you need. Takes under 5 minutes.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-number">02</div>
+      <span class="how-icon">🔍</span>
+      <div class="how-title">Discover Creators</div>
+      <p class="how-desc">Browse our verified creator database with smart filters — niche, city, language, followers, price, and authenticity score.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-number">03</div>
+      <span class="how-icon">🤝</span>
+      <div class="how-title">Collab Safely</div>
+      <p class="how-desc">Send a collaboration request, negotiate terms, and pay through our secure escrow system. No disputes, no ghosting.</p>
+    </div>
+    <div class="how-card">
+      <div class="how-number">04</div>
+      <span class="how-icon">📈</span>
+      <div class="how-title">Track & Grow</div>
+      <p class="how-desc">Get post-campaign analytics — reach, impressions, engagement, ROI, and comparison reports across creators.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="scroll-reveal">
+    <div class="section-tag">Why Collabwala</div>
+    <h2 class="section-title">Built different.<br>Built for Bharat.</h2>
+    <p class="section-sub">We solved every problem existing platforms refused to fix.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feature-card scroll-reveal">
+      <div class="feature-icon">🛡️</div>
+      <div class="feature-title">Fake Follower Detector</div>
+      <p class="feature-desc">Every creator gets an AI-powered Authenticity Score. Know exactly what % of followers are real before you spend a rupee.</p>
+    </div>
+    <div class="feature-card scroll-reveal">
+      <div class="feature-icon">💸</div>
+      <div class="feature-title">Secure Escrow Payments</div>
+      <p class="feature-desc">Brands pay into escrow. Creator gets paid only after content is approved. Zero risk on both sides.</p>
+    </div>
+    <div class="feature-card scroll-reveal">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-title">Regional Language Focus</div>
+      <p class="feature-desc">Find creators making content in Hindi, Tamil, Telugu, Marathi, Bengali, Bhojpuri and 20+ more Indian languages.</p>
+    </div>
+    <div class="feature-card scroll-reveal">
+      <div class="feature-icon">🤖</div>
+      <div class="feature-title">AI Brand–Creator Matching</div>
+      <p class="feature-desc">Tell us your brand, product and audience. Our AI instantly recommends the most compatible creators for your campaign.</p>
+    </div>
+    <div class="feature-card scroll-reveal">
+      <div class="feature-icon">📄</div>
+      <div class="feature-title">Auto Contract Generator</div>
+      <p class="feature-desc">Every collaboration gets a legally-sound agreement with deliverables, deadlines, usage rights, and payment terms.</p>
+    </div>
+    <div class="feature-card scroll-reveal">
+      <div class="feature-icon">⭐</div>
+      <div class="feature-title">Two-Way Review System</div>
+      <p class="feature-desc">Like Airbnb, both brands and creators review each other. Build reputation, filter bad actors, ensure accountability.</p>
+    </div>
+    <div class="feature-card scroll-reveal">
+      <div class="feature-icon">📊</div>
+      <div class="feature-title">Deep Analytics Reports</div>
+      <p class="feature-desc">Post-campaign reports with reach, engagement quality, sentiment analysis, ROI estimate, and side-by-side creator comparison.</p>
+    </div>
+    <div class="feature-card scroll-reveal">
+      <div class="feature-icon">🏘️</div>
+      <div class="feature-title">Nano & Micro Creator Focus</div>
+      <p class="feature-desc">We prioritise small but mighty creators with 1K–100K followers. They have 3x better engagement and are affordable for small brands.</p>
+    </div>
+  </div>
+</section>
+
+<!-- NICHES (infinite scroll) -->
+<section class="niches-section" id="niches">
+  <div class="scroll-reveal" style="text-align:center; margin-bottom: 0;">
+    <div class="section-tag">Content Niches</div>
+    <h2 class="section-title">Every niche.<br>Every language.</h2>
+    <p class="section-sub" style="margin: 0 auto;">Whatever your brand sells, we have a creator community for it.</p>
+  </div>
+
+  <div class="niche-scroll-wrap">
+    <div class="niche-row">
+      <div class="niche-chip">👗 Fashion</div><div class="niche-chip">💄 Beauty</div><div class="niche-chip">🍽️ Food</div><div class="niche-chip">✈️ Travel</div><div class="niche-chip">💪 Fitness</div><div class="niche-chip">📱 Tech</div><div class="niche-chip">🎮 Gaming</div><div class="niche-chip">📚 Education</div><div class="niche-chip">💰 Finance</div><div class="niche-chip">🎭 Entertainment</div>
+      <div class="niche-chip">👗 Fashion</div><div class="niche-chip">💄 Beauty</div><div class="niche-chip">🍽️ Food</div><div class="niche-chip">✈️ Travel</div><div class="niche-chip">💪 Fitness</div><div class="niche-chip">📱 Tech</div><div class="niche-chip">🎮 Gaming</div><div class="niche-chip">📚 Education</div><div class="niche-chip">💰 Finance</div><div class="niche-chip">🎭 Entertainment</div>
+    </div>
+    <div class="niche-row reverse">
+      <div class="niche-chip">🏡 Home Decor</div><div class="niche-chip">🌱 Sustainability</div><div class="niche-chip">📸 Photography</div><div class="niche-chip">🎵 Music</div><div class="niche-chip">🐾 Pets</div><div class="niche-chip">👶 Parenting</div><div class="niche-chip">⚽ Sports</div><div class="niche-chip">🧘 Wellness</div><div class="niche-chip">💼 Business</div><div class="niche-chip">🎨 Art & Design</div>
+      <div class="niche-chip">🏡 Home Decor</div><div class="niche-chip">🌱 Sustainability</div><div class="niche-chip">📸 Photography</div><div class="niche-chip">🎵 Music</div><div class="niche-chip">🐾 Pets</div><div class="niche-chip">👶 Parenting</div><div class="niche-chip">⚽ Sports</div><div class="niche-chip">🧘 Wellness</div><div class="niche-chip">💼 Business</div><div class="niche-chip">🎨 Art & Design</div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing-section" id="pricing">
+  <div class="scroll-reveal" style="text-align:center;">
+    <div class="section-tag">For Brands</div>
+    <h2 class="section-title">Transparent pricing.<br>No hidden fees.</h2>
+    <p class="section-sub" style="margin: 0 auto 0;">Choose a plan that fits your campaign size. Cancel anytime.</p>
+  </div>
+
+  <div class="pricing-grid">
+    <div class="pricing-card scroll-reveal">
+      <div class="pricing-plan">Starter</div>
+      <div class="pricing-price"><sup>₹</sup>2,999</div>
+      <div class="pricing-period">per month</div>
+      <ul class="pricing-features">
+        <li>50 creator searches/month</li>
+        <li>10 collaboration requests</li>
+        <li>Basic filters</li>
+        <li>Email support</li>
+        <li class="disabled">AI matching</li>
+        <li class="disabled">Escrow payments</li>
+        <li class="disabled">Campaign analytics</li>
+      </ul>
+      <a href="brand-signup.html" class="btn-pricing btn-pricing-ghost">Get Started</a>
+    </div>
+
+    <div class="pricing-card featured scroll-reveal">
+      <div class="featured-badge">⚡ Most Popular</div>
+      <div class="pricing-plan">Growth</div>
+      <div class="pricing-price"><sup>₹</sup>7,999</div>
+      <div class="pricing-period">per month</div>
+      <ul class="pricing-features">
+        <li>Unlimited searches</li>
+        <li>50 collaboration requests</li>
+        <li>Advanced filters + language</li>
+        <li>AI brand–creator matching</li>
+        <li>Escrow payment system</li>
+        <li>Campaign analytics</li>
+        <li class="disabled">White-label reports</li>
+      </ul>
+      <a href="brand-signup.html" class="btn-pricing btn-pricing-primary">Start Free Trial</a>
+    </div>
+
+    <div class="pricing-card scroll-reveal">
+      <div class="pricing-plan">Enterprise</div>
+      <div class="pricing-price">Custom</div>
+      <div class="pricing-period">talk to us</div>
+      <ul class="pricing-features">
+        <li>Unlimited everything</li>
+        <li>Dedicated account manager</li>
+        <li>API access</li>
+        <li>White-label reports</li>
+        <li>Priority creator access</li>
+        <li>Legal support</li>
+        <li>Custom integrations</li>
+      </ul>
+      <a href="brand-signup.html" class="btn-pricing btn-pricing-ghost">Contact Sales</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="scroll-reveal">
+    <div class="section-tag">Testimonials</div>
+    <h2 class="section-title">Loved by brands<br>& creators alike</h2>
+  </div>
+
+  <div class="testimonials-grid">
+    <div class="testimonial-card scroll-reveal">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"We ran our first influencer campaign through Collabwala and got 10 creators onboarded in 2 days. The escrow system gave us total peace of mind."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" style="background:rgba(255,107,0,0.15)">👩</div>
+        <div>
+          <div class="author-name">Sneha Agarwal</div>
+          <div class="author-meta">Founder, Neem & Honey Skincare</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card scroll-reveal">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Finally a platform that focuses on Hindi creators! I got 3 brand deals within a week of signing up. The verified badge really helps."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" style="background:rgba(255,184,0,0.15)">👦</div>
+        <div>
+          <div class="author-name">Vikram Yadav</div>
+          <div class="author-meta">Food Creator, 280K followers · Varanasi</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card scroll-reveal">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"The fake follower checker saved us from two bad deals before we even started. That one feature alone is worth the subscription."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar" style="background:rgba(0,200,83,0.15)">👨</div>
+        <div>
+          <div class="author-name">Arjun Mehta</div>
+          <div class="author-meta">Marketing Head, FitFuel India</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-bg"></div>
+  <div class="cta-inner scroll-reveal">
+    <div class="section-tag" style="margin: 0 auto 20px;">Get Started Today</div>
+    <h2>Ready to <em>Collab</em>?</h2>
+    <p>Join 50,000+ creators and 2,000+ brands already growing together on Collabwala.</p>
+    <div class="cta-buttons">
+      <a href="brand-signup.html" class="btn-hero-primary">🏢 I'm a Brand</a>
+      <a href="creator-onboarding.html" class="btn-hero-ghost">✨ I'm a Creator</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <a href="index.html" class="nav-logo">Collab<span style="color:var(--saffron)">wala</span></a>
+      <p class="footer-tagline">India's most transparent influencer marketplace. Real creators, real reach, real results — across all of Bharat.</p>
+    </div>
+    <div>
+      <div class="footer-col-title">Platform</div>
+      <ul class="footer-links">
+        <li><a href="#how">How it Works</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#niches">Niches</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Join</div>
+      <ul class="footer-links">
+        <li><a href="creator-onboarding.html">Join as Creator</a></li>
+        <li><a href="brand-signup.html">Register as Brand</a></li>
+        <li><a href="#">For Agencies</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Legal</div>
+      <ul class="footer-links">
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Creator Agreement</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Collabwala. All rights reserved.</div>
+    <div class="footer-flag">🇮🇳 Made with ❤️ in India</div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('revealed'); }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Signup — Collabwala</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@300;400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --saffron: #FF6B00;
+  --gold: #FFB800;
+  --green: #00C853;
+  --navy: #0B0F1A;
+  --navy2: #131929;
+  --navy3: #1C2438;
+  --border: #252D42;
+  --text: #F2F4FF;
+  --muted: #8892AA;
+  --input-bg: #0d1120;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Noise */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 9999; opacity: 0.35;
+}
+
+/* BG effects */
+.bg-blob1 {
+  position: fixed; width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(255,107,0,0.1) 0%, transparent 65%);
+  top: -200px; left: -100px;
+  border-radius: 50%; pointer-events: none; z-index: 0;
+}
+.bg-blob2 {
+  position: fixed; width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(255,184,0,0.07) 0%, transparent 65%);
+  bottom: -100px; right: -100px;
+  border-radius: 50%; pointer-events: none; z-index: 0;
+}
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 50;
+  padding: 16px 5%;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(11,15,26,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255,107,0,0.1);
+}
+
+.nav-logo {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 700; font-size: 22px;
+  text-decoration: none; color: var(--text);
+  letter-spacing: -0.5px;
+}
+.nav-logo span { color: var(--saffron); }
+
+.nav-back {
+  font-size: 14px; color: var(--muted);
+  text-decoration: none;
+  display: flex; align-items: center; gap: 6px;
+  transition: color 0.2s;
+}
+.nav-back:hover { color: var(--saffron); }
+
+/* LAYOUT */
+.page-wrap {
+  position: relative; z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 48px 20px 100px;
+}
+
+/* HEADER */
+.page-header {
+  text-align: center;
+  margin-bottom: 48px;
+  animation: fadeDown 0.6s ease both;
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.header-icon {
+  width: 64px; height: 64px;
+  background: linear-gradient(135deg, var(--saffron), var(--gold));
+  border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px;
+  margin: 0 auto 20px;
+  box-shadow: 0 8px 32px rgba(255,107,0,0.3);
+}
+
+h1 {
+  font-family: 'Clash Display', sans-serif;
+  font-weight: 700;
+  font-size: clamp(28px, 5vw, 44px);
+  letter-spacing: -1.5px;
+  line-height: 1.05;
+  margin-bottom: 12px;
+}
+
+h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--saffron), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.page-sub {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.65;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* PROGRESS */
+.progress-bar-wrap {
+  margin-bottom: 40px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+
+.steps-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 12px;
+}
+
+.step-node {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 16px;
+  border-radius: 100px;
+  font-size: 13px; font-weight: 600;
+  color: var(--muted);
+  transition: all 0.3s;
+  cursor: default;
+}
+
+.step-node.active {
+  background: rgba(255,107,0,0.12);
+  border: 1px solid rgba(255,107,0,0.3);
+  color: var(--saffron);
+}
+
+.step-node.done { color: var(--green); }
+
+.step-circle {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 800;
+  transition: all 0.3s;
+}
+
+.step-node.active .step-circle { background: var(--saffron); color: white; }
+.step-node.done .step-circle { background: var(--green); color: #000; }
+
+.step-line {
+  width: 36px; height: 1px;
+  background: var(--border);
+  transition: background 0.4s;
+}
+.step-line.done { background: rgba(0,200,83,0.4); }
+
+/* Progress fill bar */
+.progress-fill-track {
+  height: 3px;
+  background: var(--border);
+  border-radius: 100px;
+  overflow: hidden;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.progress-fill-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--saffron), var(--gold));
+  border-radius: 100px;
+  transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  width: 20%;
+}
+
+/* CARD */
+.form-card {
+  background: var(--navy2);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 44px;
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.form-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--saffron), var(--gold), var(--green));
+}
+
+@media (max-width: 600px) { .form-card { padding: 24px 18px; } }
+
+/* STEP PANELS */
+.step-panel { display: none; }
+.step-panel.active {
+  display: block;
+  animation: slideIn 0.4s ease both;
+}
+
+.step-heading {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 22px; font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.step-desc {
+  font-size: 14px; color: var(--muted);
+  margin-bottom: 32px; font-weight: 400;
+}
+
+/* FORM */
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.form-grid.c1 { grid-template-columns: 1fr; }
+.form-grid.c3 { grid-template-columns: 1fr 1fr 1fr; }
+@media (max-width: 600px) { .form-grid, .form-grid.c3 { grid-template-columns: 1fr; } }
+
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group.full { grid-column: 1 / -1; }
+
+label {
+  font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--muted);
+}
+
+input, select, textarea {
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 13px 16px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 15px; color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+}
+
+input::placeholder, textarea::placeholder { color: #2a3248; }
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--saffron);
+  box-shadow: 0 0 0 3px rgba(255,107,0,0.1);
+}
+
+select option { background: #131929; }
+textarea { resize: vertical; min-height: 90px; line-height: 1.65; }
+
+.prefix-wrap {
+  display: flex; align-items: center;
+  background: var(--input-bg);
+  border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.prefix-wrap:focus-within {
+  border-color: var(--saffron);
+  box-shadow: 0 0 0 3px rgba(255,107,0,0.1);
+}
+.prefix {
+  padding: 13px 12px 13px 16px; color: var(--muted); font-size: 14px;
+  white-space: nowrap; border-right: 1px solid var(--border);
+  background: rgba(255,255,255,0.02);
+}
+.prefix-wrap input { border: none; border-radius: 0; background: transparent; padding-left: 12px; box-shadow: none !important; }
+
+.helper { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+/* Section label */
+.sec-label {
+  font-size: 11px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 1px; color: var(--saffron);
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 16px;
+}
+.sec-label::after { content: ''; flex: 1; height: 1px; background: rgba(255,107,0,0.2); }
+
+/* Toggle chips */
+.chip-grid { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.chip {
+  padding: 8px 16px; border-radius: 100px;
+  border: 1px solid var(--border);
+  background: transparent; color: var(--muted);
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.2s;
+}
+.chip:hover { border-color: var(--saffron); color: var(--saffron); }
+.chip.sel {
+  background: rgba(255,107,0,0.12);
+  border-color: var(--saffron); color: var(--saffron);
+}
+
+/* Budget cards */
+.budget-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px;
+}
+
+.budget-card {
+  border: 1px solid var(--border); border-radius: 12px;
+  padding: 18px 12px; text-align: center; cursor: pointer;
+  transition: all 0.2s; background: transparent;
+  font-family: 'Cabinet Grotesk', sans-serif;
+}
+.budget-card:hover { border-color: var(--saffron); transform: translateY(-2px); }
+.budget-card.sel {
+  border-color: var(--saffron);
+  background: rgba(255,107,0,0.08);
+}
+
+.budget-amt {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 16px; font-weight: 700; color: var(--saffron); margin-bottom: 4px;
+}
+.budget-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+/* Platform chips */
+.platform-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.platform-chip {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 18px; border-radius: 10px;
+  border: 1px solid var(--border); background: transparent;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 14px; font-weight: 500; color: var(--muted); cursor: pointer;
+  transition: all 0.2s;
+}
+.platform-chip:hover { border-color: var(--gold); color: var(--gold); }
+.platform-chip.sel { border-color: var(--gold); background: rgba(255,184,0,0.08); color: var(--gold); }
+
+/* Creator size cards */
+.size-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px;
+}
+
+.size-card {
+  border: 1px solid var(--border); border-radius: 12px; padding: 20px 16px;
+  cursor: pointer; transition: all 0.2s; background: transparent;
+  font-family: 'Cabinet Grotesk', sans-serif;
+}
+.size-card:hover { border-color: var(--saffron); }
+.size-card.sel { border-color: var(--saffron); background: rgba(255,107,0,0.07); }
+
+.size-emoji { font-size: 24px; margin-bottom: 10px; display: block; }
+.size-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+.size-range { font-size: 12px; color: var(--muted); }
+
+/* Divider */
+.divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+/* Review */
+.review-table { display: flex; flex-direction: column; gap: 10px; }
+
+.review-row {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  padding: 14px 18px; background: var(--input-bg);
+  border-radius: 10px; border: 1px solid var(--border);
+  gap: 12px;
+}
+
+.review-key {
+  font-size: 12px; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.5px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.review-val { font-size: 14px; font-weight: 600; text-align: right; flex: 1; }
+
+/* Plan highlight box */
+.plan-highlight {
+  background: linear-gradient(135deg, rgba(255,107,0,0.1), rgba(255,184,0,0.05));
+  border: 1px solid rgba(255,107,0,0.3);
+  border-radius: 14px; padding: 20px 24px;
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+}
+
+.plan-left { }
+.plan-name { font-family: 'Clash Display', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.plan-price { font-size: 14px; color: var(--muted); }
+.plan-badge {
+  background: var(--saffron); color: white;
+  font-size: 12px; font-weight: 700;
+  padding: 6px 14px; border-radius: 100px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* Checkbox */
+.checkbox-wrap {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 16px; background: var(--input-bg);
+  border-radius: 10px; border: 1px solid var(--border); cursor: pointer;
+  margin-bottom: 12px;
+}
+.checkbox-wrap input[type="checkbox"] { width: 18px; height: 18px; min-width: 18px; margin-top: 2px; accent-color: var(--saffron); cursor: pointer; }
+.checkbox-text { font-size: 14px; color: var(--muted); line-height: 1.55; }
+.checkbox-text a { color: var(--saffron); text-decoration: none; }
+
+/* Buttons */
+.btn-row {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 40px; gap: 12px;
+}
+
+.btn {
+  padding: 14px 28px; border-radius: 12px;
+  font-family: 'Cabinet Grotesk', sans-serif;
+  font-size: 15px; font-weight: 700; cursor: pointer;
+  transition: all 0.2s; border: none;
+}
+
+.btn-ghost {
+  background: transparent; border: 1px solid var(--border); color: var(--muted);
+}
+.btn-ghost:hover { border-color: var(--text); color: var(--text); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--saffron), #ff9500);
+  color: white; flex: 1; max-width: 240px;
+  box-shadow: 0 4px 20px rgba(255,107,0,0.3);
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(255,107,0,0.4); }
+.btn-primary:active { transform: translateY(0); }
+
+/* Success */
+.success-screen { display: none; text-align: center; padding: 60px 20px; }
+.success-screen.show { display: block; animation: fadeUp 0.6s ease both; }
+
+.success-icon {
+  width: 90px; height: 90px;
+  background: linear-gradient(135deg, var(--green), #00a843);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 40px; margin: 0 auto 24px;
+  animation: pop 0.5s 0.1s cubic-bezier(.36,.07,.19,.97) both;
+  box-shadow: 0 8px 40px rgba(0,200,83,0.3);
+}
+
+@keyframes pop {
+  0% { transform: scale(0); }
+  80% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.success-title {
+  font-family: 'Clash Display', sans-serif;
+  font-size: 36px; font-weight: 700; letter-spacing: -1px; margin-bottom: 14px;
+}
+
+.success-sub {
+  color: var(--muted); font-size: 16px; max-width: 400px; margin: 0 auto 32px; line-height: 1.65;
+}
+
+.next-steps {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px;
+}
+
+.next-step-card {
+  background: var(--navy2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 20px;
+  text-align: left; max-width: 200px;
+}
+
+.next-step-num { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+.next-step-text { font-size: 14px; font-weight: 600; }
+
+.btn-success {
+  display: inline-block; padding: 14px 32px;
+  background: linear-gradient(135deg, var(--saffron), #ff9500);
+  color: white; border-radius: 12px; text-decoration: none;
+  font-weight: 800; font-size: 16px;
+  box-shadow: 0 4px 20px rgba(255,107,0,0.3);
+  transition: all 0.2s;
+}
+.btn-success:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(255,107,0,0.4); }
+</style>
+</head>
+<body>
+
+<div class="bg-blob1"></div>
+<div class="bg-blob2"></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Collab<span>wala</span></a>
+  <a href="index.html" class="nav-back">← Back to Home</a>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-icon">🏢</div>
+    <h1>Register Your <em>Brand</em></h1>
+    <p class="page-sub">Start finding the perfect creators for your campaigns — across all niches, cities, and languages in India.</p>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-bar-wrap">
+    <div class="steps-row">
+      <div class="step-node active" id="node-1"><div class="step-circle" id="nc-1">1</div> Brand Info</div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step-node" id="node-2"><div class="step-circle" id="nc-2">2</div> Campaign Goals</div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step-node" id="node-3"><div class="step-circle" id="nc-3">3</div> Creator Needs</div>
+      <div class="step-line" id="line-3"></div>
+      <div class="step-node" id="node-4"><div class="step-circle" id="nc-4">4</div> Plan & Review</div>
+    </div>
+    <div class="progress-fill-track">
+      <div class="progress-fill-bar" id="progressBar"></div>
+    </div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="form-card" id="formCard">
+
+    <!-- STEP 1: Brand Info -->
+    <div class="step-panel active" id="step-1">
+      <div class="step-heading">Tell us about your brand</div>
+      <div class="step-desc">This forms your brand profile visible to creators on Collabwala.</div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Contact Person Name *</label>
+          <input type="text" id="contactName" placeholder="Arjun Mehta" />
+        </div>
+        <div class="form-group">
+          <label>Designation / Role</label>
+          <input type="text" id="designation" placeholder="Marketing Manager" />
+        </div>
+        <div class="form-group">
+          <label>Work Email *</label>
+          <input type="email" id="workEmail" placeholder="arjun@yourbrand.com" />
+        </div>
+        <div class="form-group">
+          <label>WhatsApp / Phone *</label>
+          <div class="prefix-wrap">
+            <span class="prefix">🇮🇳 +91</span>
+            <input type="tel" id="phone" placeholder="9876543210" maxlength="10" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Brand / Company Name *</label>
+          <input type="text" id="brandName" placeholder="e.g. NutriBlast India" />
+        </div>
+        <div class="form-group">
+          <label>Industry / Category *</label>
+          <select id="industry">
+            <option value="">Select industry</option>
+            <option>Fashion & Apparel</option>
+            <option>Beauty & Skincare</option>
+            <option>Food & Beverages</option>
+            <option>Health & Fitness</option>
+            <option>Technology & Gadgets</option>
+            <option>Home & Decor</option>
+            <option>Travel & Hospitality</option>
+            <option>Finance & Fintech</option>
+            <option>Education & EdTech</option>
+            <option>Automotive</option>
+            <option>Gaming</option>
+            <option>Entertainment & OTT</option>
+            <option>Real Estate</option>
+            <option>Retail & E-commerce</option>
+            <option>FMCG / Consumer Goods</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Website URL</label>
+          <div class="prefix-wrap">
+            <span class="prefix">🔗</span>
+            <input type="url" id="website" placeholder="https://yourbrand.com" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Brand's Instagram / Social Handle</label>
+          <div class="prefix-wrap">
+            <span class="prefix">@</span>
+            <input type="text" id="brandHandle" placeholder="yourbrand" />
+          </div>
+        </div>
+        <div class="form-group full">
+          <label>What does your brand sell? (Brief description) *</label>
+          <textarea id="brandDesc" placeholder="e.g. We make natural, ayurvedic skincare products for Indian skin types. Our hero product is a vitamin C face serum."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: Campaign Goals -->
+    <div class="step-panel" id="step-2">
+      <div class="step-heading">Your campaign goals</div>
+      <div class="step-desc">Help us match you with the right creators for your objectives.</div>
+
+      <div class="sec-label">What's your primary campaign goal?</div>
+      <div class="chip-grid" id="goalChips">
+        <button class="chip" onclick="toggleChip(this,'goal',1)">🔥 Brand Awareness</button>
+        <button class="chip" onclick="toggleChip(this,'goal',1)">🛒 Product Sales</button>
+        <button class="chip" onclick="toggleChip(this,'goal',1)">📲 App Downloads</button>
+        <button class="chip" onclick="toggleChip(this,'goal',1)">👥 Follower Growth</button>
+        <button class="chip" onclick="toggleChip(this,'goal',1)">🎁 Product Launch</button>
+        <button class="chip" onclick="toggleChip(this,'goal',1)">⭐ Reviews & UGC</button>
+        <button class="chip" onclick="toggleChip(this,'goal',1)">🌐 Website Traffic</button>
+        <button class="chip" onclick="toggleChip(this,'goal',1)">📧 Lead Generation</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">What platforms do you want content on?</div>
+      <div class="platform-row" id="platformChips">
+        <button class="platform-chip" onclick="this.classList.toggle('sel')">📸 Instagram</button>
+        <button class="platform-chip" onclick="this.classList.toggle('sel')">▶️ YouTube</button>
+        <button class="platform-chip" onclick="this.classList.toggle('sel')">🎬 Moj</button>
+        <button class="platform-chip" onclick="this.classList.toggle('sel')">🌟 Josh</button>
+        <button class="platform-chip" onclick="this.classList.toggle('sel')">🐦 X / Twitter</button>
+        <button class="platform-chip" onclick="this.classList.toggle('sel')">💼 LinkedIn</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">What type of content do you need?</div>
+      <div class="chip-grid" id="contentChips">
+        <button class="chip" onclick="toggleChip(this,'content',10)">🎬 Reels / Short Videos</button>
+        <button class="chip" onclick="toggleChip(this,'content',10)">📸 Feed Posts / Photos</button>
+        <button class="chip" onclick="toggleChip(this,'content',10)">📖 Stories</button>
+        <button class="chip" onclick="toggleChip(this,'content',10)">🎥 Long-form YouTube Video</button>
+        <button class="chip" onclick="toggleChip(this,'content',10)">📦 Unboxing / Review</button>
+        <button class="chip" onclick="toggleChip(this,'content',10)">🔗 Affiliate Link Promo</button>
+        <button class="chip" onclick="toggleChip(this,'content',10)">📝 Blog / Article</button>
+        <button class="chip" onclick="toggleChip(this,'content',10)">🎙️ Podcast Feature</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Campaign Timeline</label>
+          <select id="timeline">
+            <option value="">Select timeline</option>
+            <option>ASAP (within 1 week)</option>
+            <option>2–4 weeks</option>
+            <option>1–2 months</option>
+            <option>Ongoing / Long-term</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Number of Creators Needed</label>
+          <select id="creatorCount">
+            <option value="">Select range</option>
+            <option>1–5 creators</option>
+            <option>5–15 creators</option>
+            <option>15–50 creators</option>
+            <option>50–100 creators</option>
+            <option>100+ creators</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Describe your target customer</label>
+          <textarea id="targetCustomer" placeholder="e.g. Women aged 22–35 in metro cities, interested in skincare and wellness, active on Instagram. Monthly income ₹30K+"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: Creator Preferences -->
+    <div class="step-panel" id="step-3">
+      <div class="step-heading">Creator preferences</div>
+      <div class="step-desc">Tell us what kind of creators work best for your brand.</div>
+
+      <div class="sec-label">Preferred Creator Size</div>
+      <div class="size-grid">
+        <div class="size-card" onclick="toggleSize(this)">
+          <span class="size-emoji">🌱</span>
+          <div class="size-title">Nano</div>
+          <div class="size-range">1K – 10K followers</div>
+        </div>
+        <div class="size-card" onclick="toggleSize(this)">
+          <span class="size-emoji">⚡</span>
+          <div class="size-title">Micro</div>
+          <div class="size-range">10K – 100K followers</div>
+        </div>
+        <div class="size-card" onclick="toggleSize(this)">
+          <span class="size-emoji">🚀</span>
+          <div class="size-title">Mid-Tier</div>
+          <div class="size-range">100K – 500K followers</div>
+        </div>
+        <div class="size-card" onclick="toggleSize(this)">
+          <span class="size-emoji">🌟</span>
+          <div class="size-title">Macro</div>
+          <div class="size-range">500K – 1M followers</div>
+        </div>
+        <div class="size-card" onclick="toggleSize(this)">
+          <span class="size-emoji">👑</span>
+          <div class="size-title">Mega</div>
+          <div class="size-range">1M+ followers</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Preferred Content Niches (select all that apply)</div>
+      <div class="chip-grid" id="nicheChips">
+        <button class="chip" onclick="toggleChip(this,'niche',10)">👗 Fashion</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">💄 Beauty</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">🍽️ Food</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">✈️ Travel</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">💪 Fitness</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">📱 Tech</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">🎮 Gaming</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">📚 Education</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">💰 Finance</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">🎭 Entertainment</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">🏡 Home Decor</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">🧘 Wellness</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">👶 Parenting</button>
+        <button class="chip" onclick="toggleChip(this,'niche',10)">⚽ Sports</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Target Cities / Regions</div>
+      <div class="chip-grid" id="cityChips">
+        <button class="chip" onclick="toggleChip(this,'city',10)">🌆 All India</button>
+        <button class="chip" onclick="toggleChip(this,'city',10)">🏙️ Metro Cities</button>
+        <button class="chip" onclick="toggleChip(this,'city',10)">🏘️ Tier 2 & 3 Cities</button>
+        <button class="chip" onclick="toggleChip(this,'city',10)">🔴 Delhi NCR</button>
+        <button class="chip" onclick="toggleChip(this,'city',10)">🟠 Mumbai</button>
+        <button class="chip" onclick="toggleChip(this,'city',10)">🟡 Bengaluru</button>
+        <button class="chip" onclick="toggleChip(this,'city',10)">🟢 Chennai</button>
+        <button class="chip" onclick="toggleChip(this,'city',10)">🔵 Hyderabad</button>
+        <button class="chip" onclick="toggleChip(this,'city',10)">🟣 Pune</button>
+        <button class="chip" onclick="toggleChip(this,'city',10)">⚪ Kolkata</button>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Preferred Language of Content</label>
+          <select id="lang">
+            <option value="">Any language</option>
+            <option>Hindi (हिन्दी)</option>
+            <option>English</option>
+            <option>Hinglish (Mix)</option>
+            <option>Tamil</option>
+            <option>Telugu</option>
+            <option>Kannada</option>
+            <option>Malayalam</option>
+            <option>Marathi</option>
+            <option>Bengali</option>
+            <option>Gujarati</option>
+            <option>Punjabi</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Open to Barter Collaborations?</label>
+          <select id="barter">
+            <option value="">Select preference</option>
+            <option>Yes, open to barter</option>
+            <option>Paid only</option>
+            <option>Both barter and paid</option>
+          </select>
+        </div>
+        <div class="form-group full">
+          <label>Any specific requirements or notes for creators?</label>
+          <textarea id="notes" placeholder="e.g. Must show face, Authentic unboxing style, should not have promoted competitor brands in last 3 months..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: Plan & Review -->
+    <div class="step-panel" id="step-4">
+      <div class="step-heading">Choose your plan & confirm</div>
+      <div class="step-desc">Review your brand details and select a subscription to get started.</div>
+
+      <div class="sec-label">Select Your Campaign Budget</div>
+      <div class="budget-grid">
+        <div class="budget-card" onclick="selectBudget(this)">
+          <div class="budget-amt">Under ₹25K</div>
+          <div class="budget-label">Starter</div>
+        </div>
+        <div class="budget-card" onclick="selectBudget(this)">
+          <div class="budget-amt">₹25K–₹1L</div>
+          <div class="budget-label">Small</div>
+        </div>
+        <div class="budget-card" onclick="selectBudget(this)">
+          <div class="budget-amt">₹1L–₹5L</div>
+          <div class="budget-label">Medium</div>
+        </div>
+        <div class="budget-card" onclick="selectBudget(this)">
+          <div class="budget-amt">₹5L–₹20L</div>
+          <div class="budget-label">Large</div>
+        </div>
+        <div class="budget-card" onclick="selectBudget(this)">
+          <div class="budget-amt">₹20L+</div>
+          <div class="budget-label">Enterprise</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="sec-label">Recommended Plan</div>
+      <div class="plan-highlight" id="planHighlight">
+        <div class="plan-left">
+          <div class="plan-name" id="planName">Growth Plan</div>
+          <div class="plan-price" id="planPrice">₹7,999 / month — Start with 14-day free trial</div>
+        </div>
+        <div class="plan-badge">⚡ Most Popular</div>
+      </div>
+
+      <div class="sec-label">Your Brand Summary</div>
+      <div class="review-table" id="reviewTable">
+        <!-- Dynamic -->
+      </div>
+
+      <div class="divider"></div>
+
+      <label class="checkbox-wrap">
+        <input type="checkbox" id="terms" />
+        <span class="checkbox-text">I agree to Collabwala's <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>. I confirm the details provided are accurate.</span>
+      </label>
+
+      <label class="checkbox-wrap">
+        <input type="checkbox" id="updates" checked />
+        <span class="checkbox-text">Receive campaign updates, creator recommendations, and platform tips on WhatsApp & email.</span>
+      </label>
+    </div>
+
+    <!-- Buttons -->
+    <div class="btn-row">
+      <button class="btn btn-ghost" id="backBtn" onclick="goBack()" style="display:none">← Back</button>
+      <button class="btn btn-primary" id="nextBtn" onclick="goNext()">Continue →</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS SCREEN -->
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">🎉</div>
+    <div class="success-title">You're all set!</div>
+    <p class="success-sub">Your brand profile is submitted. Our team will activate your account within 24 hours and send you creator recommendations.</p>
+
+    <div class="next-steps">
+      <div class="next-step-card">
+        <div class="next-step-num">Step 1</div>
+        <div class="next-step-text">Account verified by team</div>
+      </div>
+      <div class="next-step-card">
+        <div class="next-step-num">Step 2</div>
+        <div class="next-step-text">AI matches top creators for you</div>
+      </div>
+      <div class="next-step-card">
+        <div class="next-step-num">Step 3</div>
+        <div class="next-step-text">Start your first campaign!</div>
+      </div>
+    </div>
+
+    <a href="index.html" class="btn-success">← Back to Home</a>
+  </div>
+
+</div>
+
+<script>
+let step = 1;
+const total = 4;
+const fills = ['25%', '50%', '75%', '100%'];
+const chipGroups = {};
+
+function goNext() {
+  if (step < total) {
+    markDone(step);
+    step++;
+    show(step);
+  } else {
+    submit();
+  }
+}
+
+function goBack() {
+  if (step > 1) { step--; show(step); }
+}
+
+function show(n) {
+  document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById(`step-${n}`).classList.add('active');
+
+  document.querySelectorAll('.step-node').forEach(nd => nd.classList.remove('active'));
+  document.getElementById(`node-${n}`).classList.add('active');
+
+  document.getElementById('progressBar').style.width = fills[n - 1];
+  document.getElementById('backBtn').style.display = n > 1 ? 'block' : 'none';
+  document.getElementById('nextBtn').textContent = n === total ? '🚀 Submit & Get Started' : 'Continue →';
+
+  if (n === total) populateReview();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function markDone(n) {
+  const node = document.getElementById(`node-${n}`);
+  node.classList.remove('active');
+  node.classList.add('done');
+  node.querySelector('.step-circle').textContent = '✓';
+  const line = document.getElementById(`line-${n}`);
+  if (line) line.classList.add('done');
+}
+
+function toggleChip(btn, group, max) {
+  const all = document.querySelectorAll(`#${group}Chips .chip.sel, .chip[data-group="${group}"].sel`);
+  if (!btn.classList.contains('sel') && all.length >= max) return;
+  btn.classList.toggle('sel');
+}
+
+function toggleSize(card) { card.classList.toggle('sel'); }
+
+let selectedBudget = '';
+function selectBudget(card) {
+  document.querySelectorAll('.budget-card').forEach(c => c.classList.remove('sel'));
+  card.classList.add('sel');
+  selectedBudget = card.querySelector('.budget-amt').textContent;
+  updatePlan(selectedBudget);
+}
+
+function updatePlan(budget) {
+  const planName = document.getElementById('planName');
+  const planPrice = document.getElementById('planPrice');
+  const badge = document.querySelector('.plan-badge');
+
+  if (!budget || budget.includes('25K') && budget.includes('Under')) {
+    planName.textContent = 'Starter Plan';
+    planPrice.textContent = '₹2,999 / month — First 14 days free';
+    badge.textContent = '🌱 Good Start';
+  } else if (budget.includes('25K–₹1L')) {
+    planName.textContent = 'Growth Plan';
+    planPrice.textContent = '₹7,999 / month — Start with 14-day free trial';
+    badge.textContent = '⚡ Most Popular';
+  } else {
+    planName.textContent = 'Enterprise Plan';
+    planPrice.textContent = 'Custom pricing — Our team will contact you';
+    badge.textContent = '👑 Best Value';
+  }
+}
+
+function g(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+
+function getChipVals(selector) {
+  return [...document.querySelectorAll(selector + '.sel')].map(c => c.textContent.trim()).join(', ');
+}
+
+function populateReview() {
+  const rows = [
+    ['Contact Name', g('contactName') || '—'],
+    ['Work Email', g('workEmail') || '—'],
+    ['WhatsApp', `+91 ${g('phone') || '—'}`],
+    ['Brand Name', g('brandName') || '—'],
+    ['Industry', g('industry') || '—'],
+    ['Campaign Goal', getChipVals('#goalChips .chip') || '—'],
+    ['Content Type', getChipVals('#contentChips .chip') || '—'],
+    ['Platforms', getChipVals('#platformChips .platform-chip') || '—'],
+    ['Creator Size', [...document.querySelectorAll('.size-card.sel')].map(c => c.querySelector('.size-title').textContent).join(', ') || '—'],
+    ['Target Niches', getChipVals('#nicheChips .chip') || '—'],
+    ['Target Cities', getChipVals('#cityChips .chip') || '—'],
+    ['Budget', selectedBudget || '—'],
+    ['Timeline', g('timeline') || '—'],
+    ['Creators Needed', g('creatorCount') || '—'],
+  ];
+
+  document.getElementById('reviewTable').innerHTML = rows.map(([k, v]) => `
+    <div class="review-row">
+      <div class="review-key">${k}</div>
+      <div class="review-val">${v}</div>
+    </div>
+  `).join('');
+}
+
+function submit() {
+  if (!document.getElementById('terms').checked) {
+    alert('Please agree to the Terms of Service to continue.');
+    return;
+  }
+  document.getElementById('formCard').style.display = 'none';
+  document.querySelector('.progress-bar-wrap').style.display = 'none';
+  document.getElementById('successScreen').classList.add('show');
+}
+</script>
+</body>
+</html>
